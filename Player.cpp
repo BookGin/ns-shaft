@@ -9,13 +9,13 @@ extern Game * game; // there is an external global object called game
 Player::Player(QGraphicsItem *parent): QObject(), QGraphicsRectItem(parent){}
 
 void Player::moveLeft() {
-    if (x() - PLAYER_MOVING_SPEED > 0)
-        setPos(x()- PLAYER_MOVING_SPEED, y());
+    if (x() - left_moving_speed > 0)
+        setPos(x()- left_moving_speed, y());
 }
 
 void Player::moveRight() {
-    if (x() + rect().width() + PLAYER_MOVING_SPEED < CANVAS_WIDTH)
-        setPos(x() + PLAYER_MOVING_SPEED, y());
+    if (x() + rect().width() + right_moving_speed < CANVAS_WIDTH)
+        setPos(x() + right_moving_speed, y());
 }
 
 void Player::fall() {
@@ -26,4 +26,9 @@ void Player::fall() {
 void Player::rise() {
     setPos(x(),y() - STAIR_RISING_SPEED);
     falling_speed = PLAYER_FALLING_SPEED;
+}
+
+void Player::resetMovingSpeed() {
+    left_moving_speed = PLAYER_MOVING_SPEED;
+    right_moving_speed = PLAYER_MOVING_SPEED;
 }

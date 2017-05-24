@@ -24,12 +24,17 @@ public:
     Health *health;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
+    int elapsed_frames = 0;
 
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
 public slots:
     void updating();
+
+private:
+    Stair* getPlayerStandingOnStair();
+    void handleStairs();
 };
 
 #endif // GAME_H

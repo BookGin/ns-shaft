@@ -59,7 +59,6 @@ void Game::keyPressEvent(QKeyEvent *event) {
 
 void Game::keyReleaseEvent(QKeyEvent * event)
 {
-    // Gin: I don't know why it works
     if  (event->key() == Qt::Key_Left && key == Qt::Key_Left && event->isAutoRepeat() == false)
         key = Qt::Key_No;
     else if(event->key() == Qt::Key_Right && key == Qt::Key_Right && event->isAutoRepeat() == false)
@@ -67,44 +66,58 @@ void Game::keyReleaseEvent(QKeyEvent * event)
 }
 
 void Game::updating() {
-    static int loop_times = 0;
-
-    if (key == Qt::Key_Left)
-        player->moveLeft();
-    if (key == Qt::Key_Right)
-        player->moveRight();
-    if (key == Qt::Key_P)
-        return;
-
     // player dies?
     if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT)
+        return;
+
+    // paurse?
+    if (key == Qt::Key_P)
         return;
 
     // player get hurted by the upper spikes?
     if (player->y() == 0)
         health->decrease(UPPER_SPIKE_DAMAGE);
 
-    // player rises or falls
-    bool is_on_stair = false;
+    // player move left or right?
+    if (key == Qt::Key_Left)
+        player->moveLeft();
+    if (key == Qt::Key_Right)
+        player->moveRight();
+
+    // player rises or falls ?
+    Stair *standing_on_stair = getPlayerStandingOnStair();
+    if (standing_on_stair) {
+        standing_on_stair->takeEffect();
+        player->setPos(player->x(),standing_on_stair->y() - player->rect().height());
+        player->rise();
+    } else {
+        player->resetMovingSpeed();
+        player->fall();
+    }
+
+    // remove,generate, move stairs
+    handleStairs();
+
+    elapsed_frames++;
+}
+
+Stair* Game::getPlayerStandingOnStair()
+{
     for (Stair *stair : stairs) {
       if (stair->y() >= 0 + player->rect().height() // touched the upper spikes
           && player->y() + player->rect().height() <= stair->y() // player must be above the stair
           && player->y() + player->rect().height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
           && player->x() + player->rect().width() / 2 >= stair->x()
           && player->x() + player->rect().width() / 2 < stair->x() + stair->rect().width()) {
-               qDebug() << "on stair!" << rand() << "\n";
-               is_on_stair = true;
-               player->setPos(player->x(),stair->y() - player->rect().height());
-               break;
+               qDebug() << "on stair!" << "\n";
+               return stair;
       }
     }
+    return nullptr;
+}
 
-
-    if (is_on_stair)
-        player->rise();
-    else
-        player->fall();
-
+void Game::handleStairs()
+{
     Stair *highest_stair = (stairs.size() > 0) ? stairs.front() : nullptr;
     if (highest_stair != nullptr && highest_stair->isOutOfScreen()) {
         scene->removeItem(highest_stair);
@@ -115,12 +128,9 @@ void Game::updating() {
     for (Stair *stair : stairs)
         stair->rise();
 
-    if (loop_times % 30 == 0) {
+    if (elapsed_frames % 30 == 0) {
         Stair *stair = new Stair();
         stairs.push_back(stair);
         scene->addItem(stair);
     }
-
-    loop_times ++;
 }
-
