@@ -8,10 +8,6 @@
 ## Todo
 
 - Add more types of stairs
-  - normal
-  - spike
-  - rolling left
-  - rolling right
   - spring
   - fragile
 - upper spikes
