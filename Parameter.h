@@ -1,6 +1,8 @@
 #ifndef PARAMETER_H
 #define PARAMETER_H
 
+#define FRAME_DELAY 50
+
 #define CANVAS_WIDTH 800
 #define CANVAS_HEIGHT 600
 

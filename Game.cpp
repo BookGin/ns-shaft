@@ -14,43 +14,65 @@
 #include "Parameter.h"
 
 Game::Game(QWidget *parent) {
+    srand(time(NULL));
+
+    createScene();
+    resetPlayerScoreHealthStairs();
+    registerUpdatingCallback();
+
+    show();
+}
+
+void Game::registerUpdatingCallback() {
+    QTimer * timer = new QTimer(this);
+    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(updating()));
+    timer->start(FRAME_DELAY);
+}
+
+void Game::createScene() {
     // create the scene
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT); // make the scene 800x600 instead of infinity by infinity (default)
 
     // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
     // it can be used to visualize scenes)
-    setScene(scene);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setScene(scene);    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(CANVAS_WIDTH,CANVAS_HEIGHT);
+}
 
-    // create the player
+void Game::resetPlayerScoreHealthStairs() {
+    if (player) {
+        scene->removeItem(player);
+        delete player;
+    }
     player = new Player();
     player->setRect(0,0,PLAYER_WIDTH,PLAYER_HEIGHT); // change the rect from 0x0 (default) to 100x100 pixels
     player->setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y); // generalize to always be in the middle top of screen
-
-    /* make the player focusable and set it to be the current focus
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus(); */
-
-    // add the player to the scene
     scene->addItem(player);
 
-    // create the score/health
+    if (score) {
+        scene->removeItem(score);
+        delete score;
+    }
     score = new Score();
     scene->addItem(score);
+
+    if (health) {
+        scene->removeItem(health);
+        delete health;
+    }
     health = new Health();
     health->setPos(health->x(),health->y()+25);
     scene->addItem(health);
 
-    srand(time(NULL));
-
-    QTimer * timer = new QTimer(this);
-    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(updating()));
-    timer->start(50);
-
-    show();
+    if (!stairs.empty()) {
+      for (Stair *stair: stairs) {
+        scene->removeItem(stair);
+        delete stair;
+      }
+      stairs.clear();
+    }
 }
 
 void Game::keyPressEvent(QKeyEvent *event) {
@@ -67,8 +89,10 @@ void Game::keyReleaseEvent(QKeyEvent * event)
 
 void Game::updating() {
     // player dies?
-    if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT)
-        return;
+    if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
+      resetPlayerScoreHealthStairs();
+      return;
+    }
 
     // paurse?
     if (key == Qt::Key_P)
@@ -103,7 +127,7 @@ void Game::updating() {
 
 Stair* Game::getPlayerStandingOnStair()
 {
-    for (Stair *stair : stairs) {
+    for (Stair *stair: stairs) {
       if (stair->y() >= 0 + player->rect().height() // touched the upper spikes
           && player->y() + player->rect().height() <= stair->y() // player must be above the stair
           && player->y() + player->rect().height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision

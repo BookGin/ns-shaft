@@ -18,10 +18,10 @@ class Game: public QGraphicsView{
 public:
     Game(QWidget * parent=0);
 
-    QGraphicsScene * scene;
-    Player *player;
-    Score *score;
-    Health *health;
+    QGraphicsScene *scene = nullptr;
+    Player *player = nullptr;
+    Score *score = nullptr;
+    Health *health = nullptr;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
     int elapsed_frames = 0;
@@ -33,6 +33,9 @@ public slots:
     void updating();
 
 private:
+    void createScene();
+    void resetPlayerScoreHealthStairs();
+    void registerUpdatingCallback();
     Stair* getPlayerStandingOnStair();
     void handleStairs();
 };
