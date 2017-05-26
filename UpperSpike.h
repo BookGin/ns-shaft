@@ -1,11 +1,11 @@
 #ifndef UPPERSPIKE_H
 #define UPPERSPIKE_H
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QGraphicsItem>
 
-class UpperSpike:public QObject, public QGraphicsRectItem {
+class UpperSpike:public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     UpperSpike(QGraphicsItem * parent=0);

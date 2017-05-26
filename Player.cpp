@@ -9,7 +9,7 @@
 extern Game * game; // there is an external global object called game
 
 Player::Player(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
-    setPixmap(QPixmap("./player.png"));
+    setPixmap(QPixmap("images/player.png"));
 }
 
 void Player::moveLeft() {

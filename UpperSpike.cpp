@@ -1,8 +1,5 @@
 #include "UpperSpike.h"
 
-#include <QBrush>
-#include <QColor>
-
-UpperSpike::UpperSpike(QGraphicsItem *parent): QObject(), QGraphicsRectItem(parent){
-    setBrush(QBrush(QColor(0, 255, 255)));
+UpperSpike::UpperSpike(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
+    setPixmap(QPixmap("images/spike.png"));
 }

@@ -42,19 +42,23 @@ void Stair::takeEffect() {
 }
 
 void Stair::normalStairEffect() {
-    if (!has_taken_effect)
-        game->health->decrease(-1);
+    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
+        game->health->increase(1);
 }
 
 void Stair::spikeStairEffect() {
     if (!has_taken_effect)
-        game->health->decrease(1);
+        game->health->decrease(5);
 }
 
 void Stair::leftRollStairEffect() {
-    game->player->setPos(game->player->x() - 10,game->player->y());
+    game->player->setPos(game->player->x() - LEFT_ROLL_STAIR_SPEED,game->player->y());
+    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
+        game->health->increase(1);
 }
 
 void Stair::rightRollStairEffect() {
-    game->player->setPos(game->player->x() + 10,game->player->y());
+    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
+        game->health->increase(1);
+    game->player->setPos(game->player->x() + RIGHT_ROLL_STAIR_SPEED,game->player->y());
 }

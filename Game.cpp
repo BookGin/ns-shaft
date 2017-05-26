@@ -58,7 +58,7 @@ void Game::reset() {
     }
     upper_spike = new UpperSpike();
     upper_spike->setPos(0,0);
-    upper_spike->setRect(0,0,CANVAS_WIDTH,UPPER_SPIKE_HEIGHT);
+    //upper_spike->setRect(0,0,CANVAS_WIDTH,UPPER_SPIKE_HEIGHT);
     upper_spike->setZValue(UPPER_SPIKE_ITEM_ORDER);
     scene->addItem(upper_spike);
 
@@ -166,7 +166,7 @@ void Game::handleStairs()
     for (Stair *stair : stairs)
         stair->rise();
 
-    if (elapsed_frames % 24 == 0) {
+    if (elapsed_frames % STAIR_GENERATE_PERIOD == 0) {
         Stair *stair = new Stair();
         stair->setZValue(STAIR_ITEM_ORDER);
         stairs.push_back(stair);
