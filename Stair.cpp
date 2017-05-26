@@ -52,11 +52,9 @@ void Stair::spikeStairEffect() {
 }
 
 void Stair::leftRollStairEffect() {
-    game->player->left_moving_speed = PLAYER_MOVING_SPEED + 3;
-    game->player->right_moving_speed = PLAYER_MOVING_SPEED - 3;
+    game->player->setPos(game->player->x() - 10,game->player->y());
 }
 
 void Stair::rightRollStairEffect() {
-    game->player->left_moving_speed = PLAYER_MOVING_SPEED - 3;
-    game->player->right_moving_speed = PLAYER_MOVING_SPEED + 3;
+    game->player->setPos(game->player->x() + 10,game->player->y());
 }

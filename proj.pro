@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     Health.cpp \
     Player.cpp \
     Score.cpp \
-    Stair.cpp
+    Stair.cpp \
+    UpperSpike.cpp
 
 HEADERS  += \
     Game.h \
@@ -36,4 +37,7 @@ HEADERS  += \
     Player.h \
     Score.h \
     Stair.h \
-    Parameter.h
+    Parameter.h \
+    UpperSpike.h
+
+DISTFILES +=

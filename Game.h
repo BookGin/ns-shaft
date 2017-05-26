@@ -12,6 +12,7 @@
 #include "Score.h"
 #include "Health.h"
 #include "Stair.h"
+#include "UpperSpike.h"
 
 class Game: public QGraphicsView{
     Q_OBJECT
@@ -22,6 +23,7 @@ public:
     Player *player = nullptr;
     Score *score = nullptr;
     Health *health = nullptr;
+    UpperSpike *upper_spike = nullptr;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
     int elapsed_frames = 0;
@@ -34,7 +36,7 @@ public slots:
 
 private:
     void createScene();
-    void resetPlayerScoreHealthStairs();
+    void reset();
     void registerUpdatingCallback();
     Stair* getPlayerStandingOnStair();
     void handleStairs();

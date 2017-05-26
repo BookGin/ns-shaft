@@ -9,7 +9,7 @@ public:
     void increase();
     int getScore();
 private:
-    int score;
+    int score = 0;
 };
 
 #endif // SCORE_H

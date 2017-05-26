@@ -17,7 +17,7 @@ Game::Game(QWidget *parent) {
     srand(time(NULL));
 
     createScene();
-    resetPlayerScoreHealthStairs();
+    reset();
     registerUpdatingCallback();
 
     show();
@@ -41,21 +41,34 @@ void Game::createScene() {
     setFixedSize(CANVAS_WIDTH,CANVAS_HEIGHT);
 }
 
-void Game::resetPlayerScoreHealthStairs() {
+void Game::reset() {
     if (player) {
         scene->removeItem(player);
         delete player;
     }
     player = new Player();
     player->setRect(0,0,PLAYER_WIDTH,PLAYER_HEIGHT); // change the rect from 0x0 (default) to 100x100 pixels
-    player->setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y); // generalize to always be in the middle top of screen
+    player->setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
+    player->setZValue(PLAYER_ITEM_ORDER);
     scene->addItem(player);
+
+    if (upper_spike) {
+        scene->removeItem(upper_spike);
+        delete upper_spike;
+    }
+    upper_spike = new UpperSpike();
+    upper_spike->setPos(0,0);
+    upper_spike->setRect(0,0,CANVAS_WIDTH,UPPER_SPIKE_HEIGHT);
+    upper_spike->setZValue(UPPER_SPIKE_ITEM_ORDER);
+    scene->addItem(upper_spike);
 
     if (score) {
         scene->removeItem(score);
         delete score;
     }
     score = new Score();
+    score->setPos(0,50);
+    score->setZValue(TEXT_ITEM_ORDER);
     scene->addItem(score);
 
     if (health) {
@@ -63,7 +76,8 @@ void Game::resetPlayerScoreHealthStairs() {
         delete health;
     }
     health = new Health();
-    health->setPos(health->x(),health->y()+25);
+    health->setPos(0,25);
+    score->setZValue(TEXT_ITEM_ORDER);
     scene->addItem(health);
 
     if (!stairs.empty()) {
@@ -90,7 +104,7 @@ void Game::keyReleaseEvent(QKeyEvent * event)
 void Game::updating() {
     // player dies?
     if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
-      resetPlayerScoreHealthStairs();
+      reset();
       return;
     }
 
@@ -99,7 +113,7 @@ void Game::updating() {
         return;
 
     // player get hurted by the upper spikes?
-    if (player->y() == 0)
+    if (player->y() == UPPER_SPIKE_HEIGHT)
         health->decrease(UPPER_SPIKE_DAMAGE);
 
     // player move left or right?
@@ -128,7 +142,7 @@ void Game::updating() {
 Stair* Game::getPlayerStandingOnStair()
 {
     for (Stair *stair: stairs) {
-      if (stair->y() >= 0 + player->rect().height() // touched the upper spikes
+      if (stair->y() > UPPER_SPIKE_HEIGHT + player->rect().height() // touched the upper spikes
           && player->y() + player->rect().height() <= stair->y() // player must be above the stair
           && player->y() + player->rect().height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
           && player->x() + player->rect().width() / 2 >= stair->x()
@@ -152,8 +166,9 @@ void Game::handleStairs()
     for (Stair *stair : stairs)
         stair->rise();
 
-    if (elapsed_frames % 30 == 0) {
+    if (elapsed_frames % 24 == 0) {
         Stair *stair = new Stair();
+        stair->setZValue(STAIR_ITEM_ORDER);
         stairs.push_back(stair);
         scene->addItem(stair);
     }
