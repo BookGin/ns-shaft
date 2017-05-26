@@ -3,7 +3,15 @@
 - Windows 7 SP1 (64-bit)
 - Qt Creator 4.2.2
 - Qt 5.8
--MinGW 5.3.0 (32-bit)
+- MinGW 5.3.0 (32-bit)
+
+## Getting Started
+
+```sh
+qmake proj.proj
+make
+./proj
+```
 
 ## Todo
 
