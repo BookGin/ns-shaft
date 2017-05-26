@@ -47,7 +47,7 @@ void Game::reset() {
         delete player;
     }
     player = new Player();
-    player->setRect(0,0,PLAYER_WIDTH,PLAYER_HEIGHT); // change the rect from 0x0 (default) to 100x100 pixels
+    //player->setRect(0,0,PLAYER_WIDTH,PLAYER_HEIGHT); // change the rect from 0x0 (default) to 100x100 pixels
     player->setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
     player->setZValue(PLAYER_ITEM_ORDER);
     scene->addItem(player);
@@ -126,7 +126,7 @@ void Game::updating() {
     Stair *standing_on_stair = getPlayerStandingOnStair();
     if (standing_on_stair) {
         standing_on_stair->takeEffect();
-        player->setPos(player->x(),standing_on_stair->y() - player->rect().height());
+        player->setPos(player->x(),standing_on_stair->y() - player->height());
         player->rise();
     } else {
         player->resetMovingSpeed();
@@ -142,11 +142,11 @@ void Game::updating() {
 Stair* Game::getPlayerStandingOnStair()
 {
     for (Stair *stair: stairs) {
-      if (stair->y() > UPPER_SPIKE_HEIGHT + player->rect().height() // touched the upper spikes
-          && player->y() + player->rect().height() <= stair->y() // player must be above the stair
-          && player->y() + player->rect().height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
-          && player->x() + player->rect().width() / 2 >= stair->x()
-          && player->x() + player->rect().width() / 2 < stair->x() + stair->rect().width()) {
+      if (stair->y() > UPPER_SPIKE_HEIGHT + player->height() // touched the upper spikes
+          && player->y() + player->height() <= stair->y() // player must be above the stair
+          && player->y() + player->height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
+          && player->x() + player->width() / 2 >= stair->x()
+          && player->x() + player->width() / 2 < stair->x() + stair->rect().width()) {
                qDebug() << "on stair!" << "\n";
                return stair;
       }

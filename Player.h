@@ -4,10 +4,10 @@
 #include <QGraphicsRectItem>
 #include <QObject>
 #include <QGraphicsItem>
-
+#include <QGraphicsPixmapItem>
 #include "Parameter.h"
 
-class Player:public QObject, public QGraphicsRectItem{
+class Player:public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
     Player(QGraphicsItem * parent=0);
@@ -19,6 +19,8 @@ public:
     int falling_speed = PLAYER_FALLING_SPEED;
     void fall();
     void rise();
+    int width();
+    int height();
 };
 
 #endif // PLAYER_H

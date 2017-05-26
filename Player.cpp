@@ -4,9 +4,13 @@
 #include "Stair.h"
 #include "Game.h"
 #include <QDebug>
+#include <QPainter>
+#include <QPixmap>
 extern Game * game; // there is an external global object called game
 
-Player::Player(QGraphicsItem *parent): QObject(), QGraphicsRectItem(parent){}
+Player::Player(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
+    setPixmap(QPixmap("./player.png"));
+}
 
 void Player::moveLeft() {
     if (x() - left_moving_speed > 0)
@@ -14,7 +18,7 @@ void Player::moveLeft() {
 }
 
 void Player::moveRight() {
-    if (x() + rect().width() + right_moving_speed < CANVAS_WIDTH)
+    if (x() + width() + right_moving_speed < CANVAS_WIDTH)
         setPos(x() + right_moving_speed, y());
 }
 
@@ -31,4 +35,12 @@ void Player::rise() {
 void Player::resetMovingSpeed() {
     left_moving_speed = PLAYER_MOVING_SPEED;
     right_moving_speed = PLAYER_MOVING_SPEED;
+}
+
+int Player::width() {
+    return PLAYER_WIDTH;
+}
+
+int Player::height() {
+    return PLAYER_HEIGHT;
 }
