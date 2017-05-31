@@ -3,13 +3,16 @@
 #include <typeinfo>
 #include "Stair.h"
 #include "Game.h"
+#include "Parameter.h"
 #include <QDebug>
 #include <QPainter>
 #include <QPixmap>
 extern Game * game; // there is an external global object called game
 
 Player::Player(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
-    setPixmap(QPixmap("images/player.png"));
+    setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
+    setZValue(PLAYER_ITEM_ORDER);
+    setPixmap(QPixmap("images/player.png").scaled(PLAYER_WIDTH, PLAYER_HEIGHT));
 }
 
 void Player::moveLeft() {

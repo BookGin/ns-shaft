@@ -38,8 +38,8 @@ private:
     void createScene();
     void reset();
     void registerUpdatingCallback();
-    Stair* getPlayerStandingOnStair();
-    void handleStairs();
+    Stair* getStairWherePlayerStandingOn();
+    void updatingStairs();
 };
 
 #endif // GAME_H

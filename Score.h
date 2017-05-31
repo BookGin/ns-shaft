@@ -6,7 +6,8 @@
 class Score: public QGraphicsTextItem{
 public:
     Score(QGraphicsItem * parent=0);
-    void increase();
+    void increase(int);
+    void decrease(int);
     int getScore();
 private:
     int score = 0;

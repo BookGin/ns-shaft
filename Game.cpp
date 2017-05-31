@@ -47,9 +47,6 @@ void Game::reset() {
         delete player;
     }
     player = new Player();
-    //player->setRect(0,0,PLAYER_WIDTH,PLAYER_HEIGHT); // change the rect from 0x0 (default) to 100x100 pixels
-    player->setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
-    player->setZValue(PLAYER_ITEM_ORDER);
     scene->addItem(player);
 
     if (upper_spike) {
@@ -57,9 +54,6 @@ void Game::reset() {
         delete upper_spike;
     }
     upper_spike = new UpperSpike();
-    upper_spike->setPos(0,0);
-    //upper_spike->setRect(0,0,CANVAS_WIDTH,UPPER_SPIKE_HEIGHT);
-    upper_spike->setZValue(UPPER_SPIKE_ITEM_ORDER);
     scene->addItem(upper_spike);
 
     if (score) {
@@ -67,8 +61,6 @@ void Game::reset() {
         delete score;
     }
     score = new Score();
-    score->setPos(0,50);
-    score->setZValue(TEXT_ITEM_ORDER);
     scene->addItem(score);
 
     if (health) {
@@ -76,11 +68,9 @@ void Game::reset() {
         delete health;
     }
     health = new Health();
-    health->setPos(0,25);
-    score->setZValue(TEXT_ITEM_ORDER);
     scene->addItem(health);
 
-    if (!stairs.empty()) {
+    if (not stairs.empty()) {
       for (Stair *stair: stairs) {
         scene->removeItem(stair);
         delete stair;
@@ -101,6 +91,7 @@ void Game::keyReleaseEvent(QKeyEvent * event)
         key = Qt::Key_No;
 }
 
+// We use the name `updating` in case of method name collision.
 void Game::updating() {
     // player dies?
     if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
@@ -123,7 +114,7 @@ void Game::updating() {
         player->moveRight();
 
     // player rises or falls ?
-    Stair *standing_on_stair = getPlayerStandingOnStair();
+    Stair *standing_on_stair = getStairWherePlayerStandingOn();
     if (standing_on_stair) {
         standing_on_stair->takeEffect();
         player->setPos(player->x(),standing_on_stair->y() - player->height());
@@ -134,12 +125,12 @@ void Game::updating() {
     }
 
     // remove,generate, move stairs
-    handleStairs();
+    updatingStairs();
 
     elapsed_frames++;
 }
 
-Stair* Game::getPlayerStandingOnStair()
+Stair* Game::getStairWherePlayerStandingOn()
 {
     for (Stair *stair: stairs) {
       if (stair->y() > UPPER_SPIKE_HEIGHT + player->height() // touched the upper spikes
@@ -154,7 +145,7 @@ Stair* Game::getPlayerStandingOnStair()
     return nullptr;
 }
 
-void Game::handleStairs()
+void Game::updatingStairs()
 {
     Stair *highest_stair = (stairs.size() > 0) ? stairs.front() : nullptr;
     if (highest_stair != nullptr && highest_stair->isOutOfScreen()) {
