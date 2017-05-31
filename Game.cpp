@@ -137,7 +137,7 @@ Stair* Game::getStairWherePlayerStandingOn()
           && player->y() + player->height() <= stair->y() // player must be above the stair
           && player->y() + player->height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
           && player->x() + player->width() / 2 >= stair->x()
-          && player->x() + player->width() / 2 < stair->x() + stair->rect().width()) {
+          && player->x() + player->width() / 2 < stair->x() + stair->width()) {
                qDebug() << "on stair!" << "\n";
                return stair;
       }

@@ -3,20 +3,39 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <cstdlib>
-#include <QBrush>
-#include <QColor>
+#include <QPixmap>
 #include "Game.h"
 #include "Parameter.h"
 
 extern Game * game;
 
-Stair::Stair(QGraphicsItem *parent): QObject(), QGraphicsRectItem(parent){
+Stair::Stair(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
     int random_x = rand() % (CANVAS_WIDTH - STAIR_WIDTH);
-    stair_type = (StairType)(rand() % 4);
-    setBrush(QBrush(QColor(255, 255 * ((stair_type&2) >> 1), 255 * (stair_type & 1))));
+    stair_type = (StairType)(rand() % NUM_OF_STAIR_TYPE);
     setPos(random_x,CANVAS_HEIGHT);
-    setRect(0,0,STAIR_WIDTH,STAIR_HEIGHT);
+    setZValue(STAIR_ITEM_ORDER);
+    initPixmap();
+}
 
+void Stair::initPixmap() {
+    switch(stair_type) {
+      case spike_stair:
+        setPixmap(QPixmap("images/spike_stair.png").scaled(STAIR_WIDTH, STAIR_HEIGHT)); break;
+      case normal_stair:
+        setPixmap(QPixmap("images/normal_stair.png").scaled(STAIR_WIDTH, STAIR_HEIGHT)); break;
+      case left_roll_stair:
+        setPixmap(QPixmap("images/left_roll_stair.png").scaled(STAIR_WIDTH, STAIR_HEIGHT)); break;
+      case right_roll_stair:
+        setPixmap(QPixmap("images/right_roll_stair.png").scaled(STAIR_WIDTH, STAIR_HEIGHT)); break;
+    }
+}
+
+int Stair::width() {
+    return STAIR_WIDTH;
+}
+
+int Stair::height() {
+    return STAIR_HEIGHT;
 }
 
 void Stair::rise(){
@@ -24,7 +43,7 @@ void Stair::rise(){
 }
 
 bool Stair::isOutOfScreen() {
-    return (y() + rect().height()) <= 0;
+    return (y() + height()) <= 0;
 }
 
 void Stair::takeEffect() {
