@@ -36,7 +36,8 @@ void Game::createScene() {
 
     // make the newly created scene the scene to visualize (since Game is a QGraphicsView Widget,
     // it can be used to visualize scenes)
-    setScene(scene);    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setScene(scene);    
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(CANVAS_WIDTH,CANVAS_HEIGHT);
 }
@@ -123,7 +124,7 @@ void Game::updating() {
         player->fall();
     }
 
-    // remove,generate, move stairs
+    // remove, generate and rise stairs
     updatingStairs();
 
     elapsed_frames++;
@@ -135,8 +136,8 @@ Stair* Game::getStairWherePlayerStandingOn()
       if (stair->y() > UPPER_SPIKE_HEIGHT + player->height() // touched the upper spikes
           && player->y() + player->height() <= stair->y() // player must be above the stair
           && player->y() + player->height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
-          && player->x() + player->width() / 2 >= stair->x()
-          && player->x() + player->width() / 2 < stair->x() + stair->width()) {
+          && player->x() + player->width() >= stair->x()
+          && player->x() + player->width() < stair->x() + stair->width()) {
                return stair;
       }
     }
@@ -157,7 +158,6 @@ void Game::updatingStairs()
 
     if (elapsed_frames % STAIR_GENERATE_PERIOD == 0) {
         Stair *stair = new Stair();
-        stair->setZValue(STAIR_ITEM_ORDER);
         stairs.push_back(stair);
         scene->addItem(stair);
     }
