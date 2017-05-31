@@ -35,11 +35,6 @@ void Player::rise() {
     falling_speed = PLAYER_FALLING_SPEED;
 }
 
-void Player::resetMovingSpeed() {
-    left_moving_speed = PLAYER_MOVING_SPEED;
-    right_moving_speed = PLAYER_MOVING_SPEED;
-}
-
 int Player::width() {
     return PLAYER_WIDTH;
 }

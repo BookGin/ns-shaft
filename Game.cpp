@@ -120,7 +120,6 @@ void Game::updating() {
         player->setPos(player->x(),standing_on_stair->y() - player->height());
         player->rise();
     } else {
-        player->resetMovingSpeed();
         player->fall();
     }
 
@@ -138,7 +137,6 @@ Stair* Game::getStairWherePlayerStandingOn()
           && player->y() + player->height() + player->falling_speed > stair->y() - STAIR_RISING_SPEED // and collision
           && player->x() + player->width() / 2 >= stair->x()
           && player->x() + player->width() / 2 < stair->x() + stair->width()) {
-               qDebug() << "on stair!" << "\n";
                return stair;
       }
     }
