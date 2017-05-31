@@ -61,23 +61,23 @@ void Stair::takeEffect() {
 }
 
 void Stair::normalStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+    // 正常的 Stair
+    // 如果玩家 HP 沒滿，那麼增加一點生命值
 }
 
 void Stair::spikeStairEffect() {
     if (!has_taken_effect)
-        game->health->decrease(5);
+        game->health->decrease(5); // If the health is negative, updating() in Game.cpp will regard it as death
 }
 
 void Stair::leftRollStairEffect() {
-    game->player->setPos(game->player->x() - LEFT_ROLL_STAIR_SPEED,game->player->y());
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+    // 向左捲動的 stair
+    // 如果玩家 HP 沒滿，那麼增加一點生命值
+    // 將玩家位置設定為，目前位置往左移 LEFT_ROLL_STAIR_SPEED 單位的距離
 }
 
 void Stair::rightRollStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
-    game->player->setPos(game->player->x() + RIGHT_ROLL_STAIR_SPEED,game->player->y());
+    // 向右捲動的 stair
+    // 如果玩家 HP 比預設的血量小，那麼增加一點生命值
+    // 將玩家位置設定為，目前位置往右移 RIGHT_ROLL_STAIR_SPEED 單位的距離
 }
