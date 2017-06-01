@@ -2,6 +2,7 @@
 #define SCORE_H
 
 #include <QGraphicsTextItem>
+#include "Parameter.h"
 
 class Score: public QGraphicsTextItem{
 public:
@@ -10,7 +11,7 @@ public:
     void decrease(int);
     int getScore();
 private:
-    int score = 0;
+    int score = DEFAULT_SCORE;
 };
 
 #endif // SCORE_H

@@ -25,6 +25,7 @@
 #define PLAYER_MOVING_SPEED 30
 
 #define DEFAULT_HEALTH 12
+#define DEFAULT_SCORE 0
 
 #define UPPER_SPIKE_DAMAGE 5
 // UPPER_SPIKE_WIDTH is equal to CANVAS_WIDTH
@@ -36,10 +37,12 @@
 #define HEALTH_TEXT_Y 25
 
 enum ITEM_ORDER {
+    // buttom
     PLAYER_ITEM_ORDER,
     STAIR_ITEM_ORDER,
     UPPER_SPIKE_ITEM_ORDER,
-    TEXT_ITEM_ORDER
+    TEXT_ITEM_ORDER 
+    // top
 };
 
 #endif // PARAMETER_H
