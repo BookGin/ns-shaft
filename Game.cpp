@@ -106,7 +106,7 @@ void Game::updating() {
 
     // player get hurted by the upper spikes?
     if (player->y() == UPPER_SPIKE_HEIGHT)
-        health->decrease(UPPER_SPIKE_DAMAGE);
+        upper_spike->takeEffect();
 
     // player move left or right?
     if (key == Qt::Key_Left)

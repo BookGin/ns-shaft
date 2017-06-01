@@ -9,6 +9,7 @@ class UpperSpike:public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     UpperSpike(QGraphicsItem * parent=0);
+    void takeEffect();
 };
 
 #endif // UPPERSPIKE_H
