@@ -13,7 +13,6 @@ Player::Player(QGraphicsItem *parent, const char *img): QObject(), QGraphicsPixm
     setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
     setZValue(PLAYER_ITEM_ORDER);
     setPixmap(QPixmap(img).scaled(PLAYER_WIDTH, PLAYER_HEIGHT));
-    qDebug()<<img<<endl;
 }
 
 void Player::moveLeft() {

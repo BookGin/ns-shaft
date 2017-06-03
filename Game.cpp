@@ -110,6 +110,15 @@ void Game::updating() {
       reset();
       return;
     }
+
+    if ( player_num == 2 ) {
+        if( health->getHealth() <= 0 || player2->y() >= CANVAS_HEIGHT )
+        {
+            reset();
+            return;
+        }
+    }
+
     // switch mod?
     if (key == Qt::Key_2)
     {
@@ -134,9 +143,9 @@ void Game::updating() {
     if (player_num == 2)
     {
         if (key == Qt::Key_Q)
-            player->moveLeft();
+            player2->moveLeft();
         if (key == Qt::Key_W)
-            player->moveRight();
+            player2->moveRight();
     }
 
     // player rises or falls ?
