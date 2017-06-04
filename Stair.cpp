@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include "Game.h"
 #include "Parameter.h"
+#include "Health.h"
 
 extern Game * game;
 
@@ -46,38 +47,38 @@ bool Stair::isOutOfScreen() {
     return (y() + height()) <= 0;
 }
 
-void Stair::takeEffect() {
+void Stair::takeEffect(Player *player,Health *health) {
     switch(stair_type) {
       case spike_stair:
-        spikeStairEffect(); break;
+        spikeStairEffect(player,health); break;
       case normal_stair:
-        normalStairEffect(); break;
+        normalStairEffect(player,health); break;
       case left_roll_stair:
-        leftRollStairEffect(); break;
+        leftRollStairEffect(player,health); break;
       case right_roll_stair:
-        rightRollStairEffect(); break;
+        rightRollStairEffect(player,health); break;
     }
     has_taken_effect = true;
 }
 
-void Stair::normalStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+void Stair::normalStairEffect(Player *player,Health *health) {
+    if (!has_taken_effect && health->getHealth() < DEFAULT_HEALTH)
+        health->increase(1);
 }
 
-void Stair::spikeStairEffect() {
+void Stair::spikeStairEffect(Player *player,Health *health) {
     if (!has_taken_effect)
-        game->health->decrease(5);
+        health->decrease(5);
 }
 
-void Stair::leftRollStairEffect() {
-    game->player->setPos(game->player->x() - LEFT_ROLL_STAIR_SPEED,game->player->y());
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+void Stair::leftRollStairEffect(Player *player,Health *health) {
+    player->setPos(player->x() - LEFT_ROLL_STAIR_SPEED,player->y());
+    if (!has_taken_effect && health->getHealth() < DEFAULT_HEALTH)
+        health->increase(1);
 }
 
-void Stair::rightRollStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
-    game->player->setPos(game->player->x() + RIGHT_ROLL_STAIR_SPEED,game->player->y());
+void Stair::rightRollStairEffect(Player *player,Health *health) {
+    if (!has_taken_effect && health->getHealth() < DEFAULT_HEALTH)
+        health->increase(1);
+    player->setPos(player->x() + RIGHT_ROLL_STAIR_SPEED,player->y());
 }
