@@ -92,7 +92,10 @@ void Game::reset() {
 }
 
 void Game::keyPressEvent(QKeyEvent *event) {
-    key = event->key();
+    if( event->key() != Qt::Key_W && event->key()!=Qt::Key_Q )
+        key = event->key();
+    else
+        key2 = event->key();
 }
 
 void Game::keyReleaseEvent(QKeyEvent * event)
@@ -101,6 +104,10 @@ void Game::keyReleaseEvent(QKeyEvent * event)
         key = Qt::Key_No;
     else if(event->key() == Qt::Key_Right && key == Qt::Key_Right && event->isAutoRepeat() == false)
         key = Qt::Key_No;
+    else if(event->key() == Qt::Key_W && key2 == Qt::Key_W && event->isAutoRepeat() == false)
+        key2 = Qt::Key_No;
+    else if(event->key() == Qt::Key_Q && key2 == Qt::Key_Q && event->isAutoRepeat() == false)
+        key2 = Qt::Key_No;
 }
 
 // We use the name `updating` in case of method name collision.
@@ -142,9 +149,9 @@ void Game::updating() {
     // player2
     if (player_num == 2)
     {
-        if (key == Qt::Key_Q)
+        if (key2 == Qt::Key_Q)
             player2->moveLeft();
-        if (key == Qt::Key_W)
+        if (key2 == Qt::Key_W)
             player2->moveRight();
     }
 

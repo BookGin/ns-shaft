@@ -27,6 +27,7 @@ public:
     UpperSpike *upper_spike = nullptr;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
+    int key2 = Qt::Key_No;
     int elapsed_frames = 0;
     int player_num = 1;
 
