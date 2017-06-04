@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include "Game.h"
 #include "Parameter.h"
+#include "Health.h"
 
 extern Game * game;
 
@@ -46,38 +47,39 @@ bool Stair::isOutOfScreen() {
     return (y() + height()) <= 0;
 }
 
-void Stair::takeEffect() {
+void Stair::takeEffect(Player *player,Health *health) {
     switch(stair_type) {
       case spike_stair:
-        spikeStairEffect(); break;
+        spikeStairEffect(player,health); break;
       case normal_stair:
-        normalStairEffect(); break;
+        normalStairEffect(player,health); break;
       case left_roll_stair:
-        leftRollStairEffect(); break;
+        leftRollStairEffect(player,health); break;
       case right_roll_stair:
-        rightRollStairEffect(); break;
+        rightRollStairEffect(player,health); break;
     }
     has_taken_effect = true;
 }
 
-void Stair::normalStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+
+void Stair::normalStairEffect(Player *player,Health *health) {
+    // 正常的 Stair
+    // 如果玩家 HP 沒滿，那麼增加一點生命值
 }
 
-void Stair::spikeStairEffect() {
+void Stair::spikeStairEffect(Player *player,Health *health) {
     if (!has_taken_effect)
-        game->health->decrease(5);
+        health->decrease(5); // If the health is negative, updating() in Game.cpp will regard it as death
 }
 
-void Stair::leftRollStairEffect() {
-    game->player->setPos(game->player->x() - LEFT_ROLL_STAIR_SPEED,game->player->y());
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
+void Stair::leftRollStairEffect(Player *player,Health *health) {
+    // 向左捲動的 stair
+    // 如果玩家 HP 沒滿，那麼增加一點生命值
+    // 將玩家位置設定為，目前位置往左移 LEFT_ROLL_STAIR_SPEED 單位的距離
 }
 
-void Stair::rightRollStairEffect() {
-    if (!has_taken_effect && game->health->getHealth() < DEFAULT_HEALTH)
-        game->health->increase(1);
-    game->player->setPos(game->player->x() + RIGHT_ROLL_STAIR_SPEED,game->player->y());
+void Stair::rightRollStairEffect(Player *player,Health *health) {
+    // 向右捲動的 stair
+    // 如果玩家 HP 比預設的血量小，那麼增加一點生命值
+    // 將玩家位置設定為，目前位置往右移 RIGHT_ROLL_STAIR_SPEED 單位的距離
 }
