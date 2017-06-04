@@ -57,6 +57,7 @@ void Game::reset() {
         delete player2;
         player2 = nullptr;
     }
+    //TODO: 設定一張自己的圖片給2P
     if (player_num==2) {
         player2 = new Player(0,"images/player2.png");
         scene->addItem(player2);
@@ -89,7 +90,8 @@ void Game::reset() {
         health2 = nullptr;
     }
     if (player_num==2) {
-        health2 = new Health(0,HEALTH_TEXT_Y+75);
+        //TODO: 調整2P Health顯示的位置到1P的左邊
+        health2 = new Health(0,HEALTH_TEXT_Y+10);
         scene->addItem(health2);
     }
 
@@ -131,22 +133,13 @@ static void ShowMsg(const char *str)
 // We use the name `updating` in case of method name collision.
 void Game::updating() {
     // player dies?
+    // TODO: 判斷雙人模式下的輸贏
     if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
         reset();
-        if(player_num==1)
-            ShowMsg("GG!");
-        else
-            ShowMsg("P2 Win!");
+        ShowMsg("GG!");
         return;
     }
-    if ( player_num == 2 ) {
-        if( health2->getHealth() <= 0 || player2->y() >= CANVAS_HEIGHT )
-        {
-            reset();
-            ShowMsg("P1 Win!");
-            return;
-        }
-    }
+    // player2...
 
     // switch mod?
     if (key == Qt::Key_2)
@@ -161,7 +154,6 @@ void Game::updating() {
         return;
 
     // player get hurted by the upper spikes?
-    // Todo: Fix health for 2p
     if (player->y() == UPPER_SPIKE_HEIGHT)
         health->decrease(UPPER_SPIKE_DAMAGE);
     // player move left or right?
@@ -169,7 +161,7 @@ void Game::updating() {
         player->moveLeft();
     if (key == Qt::Key_Right)
         player->moveRight();
-    // player2
+
     if (player_num == 2)
     {
         if (player2->y() == UPPER_SPIKE_HEIGHT)
