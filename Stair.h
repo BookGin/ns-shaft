@@ -4,6 +4,8 @@
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QGraphicsItem>
+#include "Health.h"
+#include "Player.h"
 
 enum StairType {
     normal_stair, spike_stair, left_roll_stair, right_roll_stair,
@@ -16,7 +18,7 @@ public:
     Stair(QGraphicsItem * parent=0);
     void rise();
     bool isOutOfScreen();
-    void takeEffect();
+    void takeEffect(Player *player, Health *health);
     int width();
     int height();
 
@@ -25,10 +27,10 @@ private:
     bool has_taken_effect = false;
     StairType stair_type;
 
-    void normalStairEffect();
-    void spikeStairEffect();
-    void leftRollStairEffect();
-    void rightRollStairEffect();
+    void normalStairEffect(Player *player,Health *health);
+    void spikeStairEffect(Player *player, Health *health);
+    void leftRollStairEffect(Player *player,Health *health);
+    void rightRollStairEffect(Player *player,Health *health);
 };
 
 #endif

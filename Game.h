@@ -21,12 +21,16 @@ public:
 
     QGraphicsScene *scene = nullptr;
     Player *player = nullptr;
+    Player *player2 = nullptr;
     Score *score = nullptr;
     Health *health = nullptr;
+    Health *health2 = nullptr;
     UpperSpike *upper_spike = nullptr;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
+    int key2 = Qt::Key_No;
     int elapsed_frames = 0;
+    int player_num = 1;
 
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -38,7 +42,7 @@ private:
     void createScene();
     void reset();
     void registerUpdatingCallback();
-    Stair* getStairWherePlayerStandingOn();
+    Stair* getStairWherePlayerStandingOn(Player *player);
     void updatingStairs();
 };
 

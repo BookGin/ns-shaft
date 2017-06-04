@@ -9,10 +9,10 @@
 #include <QPixmap>
 extern Game * game; // there is an external global object called game
 
-Player::Player(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
+Player::Player(QGraphicsItem *parent, const char *img): QObject(), QGraphicsPixmapItem(parent){
     setPos(PLAYER_START_POSITION_X,PLAYER_START_POSITION_Y + UPPER_SPIKE_HEIGHT); // generalize to always be in the middle top of screen
     setZValue(PLAYER_ITEM_ORDER);
-    setPixmap(QPixmap("images/player.png").scaled(PLAYER_WIDTH, PLAYER_HEIGHT));
+    setPixmap(QPixmap(img).scaled(PLAYER_WIDTH, PLAYER_HEIGHT));
 }
 
 void Player::moveLeft() {
