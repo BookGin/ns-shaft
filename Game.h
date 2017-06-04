@@ -24,6 +24,7 @@ public:
     Player *player2 = nullptr;
     Score *score = nullptr;
     Health *health = nullptr;
+    Health *health2 = nullptr;
     UpperSpike *upper_spike = nullptr;
     std::deque<Stair*> stairs;
     int key = Qt::Key_No;
