@@ -43,12 +43,23 @@ void Game::createScene() {
 }
 
 void Game::reset() {
+    key = Qt::Key_No;
     if (player) {
         scene->removeItem(player);
         delete player;
     }
     player = new Player();
     scene->addItem(player);
+
+    if (player2) {
+        scene->removeItem(player2);
+        delete player2;
+        player2 = nullptr;
+    }
+    if (player_num==2) {
+        player2 = new Player(0,"images/player2.png");
+        scene->addItem(player2);
+    }
 
     if (upper_spike) {
         scene->removeItem(upper_spike);
@@ -71,7 +82,7 @@ void Game::reset() {
     health = new Health();
     scene->addItem(health);
 
-    if (not stairs.empty()) {
+    if (!stairs.empty()) {
       for (Stair *stair: stairs) {
         scene->removeItem(stair);
         delete stair;
@@ -100,6 +111,21 @@ void Game::updating() {
       return;
     }
 
+    if ( player_num == 2 ) {
+        if( health->getHealth() <= 0 || player2->y() >= CANVAS_HEIGHT )
+        {
+            reset();
+            return;
+        }
+    }
+
+    // switch mod?
+    if (key == Qt::Key_2)
+    {
+        player_num = 1 + player_num % 2; // switch between 1 ~ 2
+        reset();
+        return;
+    }
     // paurse?
     if (key == Qt::Key_P)
         return;
@@ -113,15 +139,28 @@ void Game::updating() {
         player->moveLeft();
     if (key == Qt::Key_Right)
         player->moveRight();
+    // player2
+    if (player_num == 2)
+    {
+        if (key == Qt::Key_Q)
+            player2->moveLeft();
+        if (key == Qt::Key_W)
+            player2->moveRight();
+    }
 
     // player rises or falls ?
-    Stair *standing_on_stair = getStairWherePlayerStandingOn();
-    if (standing_on_stair) {
-        standing_on_stair->takeEffect();
-        player->setPos(player->x(),standing_on_stair->y() - player->height());
-        player->rise();
-    } else {
-        player->fall();
+    std::vector<std::pair<Player*,Stair*>> users;
+    users.emplace_back(player,getStairWherePlayerStandingOn(player));
+    if (player_num == 2)
+        users.emplace_back(player2,getStairWherePlayerStandingOn(player2));
+    for(auto p:users) {
+        if( p.second ) {
+            p.second->takeEffect();
+            p.first->setPos(p.first->x(),p.second->y() - p.first->height());
+            p.first->rise();
+        } else {
+            p.first->fall();
+        }
     }
 
     // remove, generate and rise stairs
@@ -130,7 +169,7 @@ void Game::updating() {
     elapsed_frames++;
 }
 
-Stair* Game::getStairWherePlayerStandingOn()
+Stair* Game::getStairWherePlayerStandingOn(Player *player)
 {
     for (Stair *stair: stairs) {
       if (stair->y() > UPPER_SPIKE_HEIGHT + player->height() // touched the upper spikes
