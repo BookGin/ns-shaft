@@ -133,11 +133,6 @@ static void ShowMsg(const char *str)
 // We use the name `updating` in case of method name collision.
 void Game::updating() {
     // player dies?
-    if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
-        reset();
-        ShowMsg("You died.");
-        return;
-    }
     if (player_num == 2) {
       if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
           reset();
@@ -147,6 +142,12 @@ void Game::updating() {
       if (health2->getHealth() <= 0 || player2->y() >= CANVAS_HEIGHT) {
           reset();
           ShowMsg("1P wins!");
+          return;
+      }
+    } else {
+      if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
+          reset();
+          ShowMsg("You died.");
           return;
       }
     }
