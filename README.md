@@ -4,6 +4,8 @@
 
 This is a project for [CSIE Sprout 2017, C/C++](https://tw-csie-sprout.github.io/c2017/#!index.md).
 
+![](screenshot.png?raw=true)
+
 ## Dependency
 
 - Qt 5.8
