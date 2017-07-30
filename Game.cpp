@@ -57,7 +57,7 @@ void Game::reset() {
         delete player2;
         player2 = nullptr;
     }
-    //TODO: 設定一張自己的圖片給2P
+
     if (player_num==2) {
         player2 = new Player(0,"images/player2.png");
         scene->addItem(player2);
@@ -90,8 +90,8 @@ void Game::reset() {
         health2 = nullptr;
     }
     if (player_num==2) {
-        //TODO: 調整2P Health顯示的位置到1P的左邊
         health2 = new Health(0,HEALTH_TEXT_Y+10);
+        health2->setPos(HEALTH_TEXT_X+705,HEALTH_TEXT_Y);
         scene->addItem(health2);
     }
 
@@ -105,7 +105,7 @@ void Game::reset() {
 }
 
 void Game::keyPressEvent(QKeyEvent *event) {
-    if( event->key() != Qt::Key_W && event->key()!=Qt::Key_Q )
+    if( event->key() != Qt::Key_X && event->key()!=Qt::Key_Z )
         key = event->key();
     else
         key2 = event->key();
@@ -117,9 +117,9 @@ void Game::keyReleaseEvent(QKeyEvent * event)
         key = Qt::Key_No;
     else if(event->key() == Qt::Key_Right && key == Qt::Key_Right && event->isAutoRepeat() == false)
         key = Qt::Key_No;
-    else if(event->key() == Qt::Key_W && key2 == Qt::Key_W && event->isAutoRepeat() == false)
+    else if(event->key() == Qt::Key_X && key2 == Qt::Key_X && event->isAutoRepeat() == false)
         key2 = Qt::Key_No;
-    else if(event->key() == Qt::Key_Q && key2 == Qt::Key_Q && event->isAutoRepeat() == false)
+    else if(event->key() == Qt::Key_Z && key2 == Qt::Key_Z && event->isAutoRepeat() == false)
         key2 = Qt::Key_No;
 }
 
@@ -133,13 +133,23 @@ static void ShowMsg(const char *str)
 // We use the name `updating` in case of method name collision.
 void Game::updating() {
     // player dies?
-    // TODO: 判斷雙人模式下的輸贏
     if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
         reset();
-        ShowMsg("GG!");
+        ShowMsg("You died.");
         return;
     }
-    // player2...
+    if (player_num == 2) {
+      if (health->getHealth() <= 0 || player->y() >= CANVAS_HEIGHT) {
+          reset();
+          ShowMsg("2P wins!");
+          return;
+      }
+      if (health2->getHealth() <= 0 || player2->y() >= CANVAS_HEIGHT) {
+          reset();
+          ShowMsg("1P wins!");
+          return;
+      }
+    }
 
     // switch mod?
     if (key == Qt::Key_2)
@@ -165,12 +175,12 @@ void Game::updating() {
 
     if (player_num == 2)
     {
-        if (player2->y() == UPPER_SPIKE_HEIGHT)
-            health2->decrease(UPPER_SPIKE_DAMAGE);
-        if (key2 == Qt::Key_Q)
-            player2->moveLeft();
-        if (key2 == Qt::Key_W)
-            player2->moveRight();
+      if (player2->y() == UPPER_SPIKE_HEIGHT)
+        health2->decrease(UPPER_SPIKE_DAMAGE);
+      if (key2 == Qt::Key_Z)
+        player2->moveLeft();
+      if (key2 == Qt::Key_X)
+        player2->moveRight();
     }
 
     // player rises or falls ?
@@ -227,5 +237,6 @@ void Game::updatingStairs()
         Stair *stair = new Stair();
         stairs.push_back(stair);
         scene->addItem(stair);
+        score->increase(1);
     }
 }
